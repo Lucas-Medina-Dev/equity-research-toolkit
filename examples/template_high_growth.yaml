@@ -1,0 +1,75 @@
+# TEMPLATE — Case 1 (high growth / pre-profit). ILLUSTRATIVE NUMBERS ONLY.
+#
+# A fictional BNPL-style company used to demonstrate the Case 1 branch:
+# losses until recently → revenue-driven DCF where the EBIT margin
+# converges linearly to a profitable-peer target, and comps weighted 60%.
+# Replace every value with sourced data before using it.
+
+company:
+  name: Example Pay (illustrative)
+  ticker: EXPAY
+  currency: USD
+  units: m
+  price: 12.00
+  price_date: "2026-11-06"
+  diluted_shares: 400.0
+  valuation_date: "2026-12-31"
+  revenue_label: Revenue
+
+history:
+  years:      [2022,   2023,   2024,  2025]
+  revenue:    [1200.0, 1550.0, 1900.0, 2300.0]
+  ebitda:     [-450.0, -180.0, 40.0,   160.0]   # positive only for 2 years → Case 1
+  net_income: [-600.0, -320.0, -60.0,  45.0]
+
+ltm:
+  revenue: 2450.0
+  ebitda: 200.0
+  net_income: 80.0
+
+cost_of_capital:
+  risk_free: 0.0494
+  equity_risk_premium: 0.0428
+  raw_beta: 1.9
+  blume_adjust: true
+  pre_tax_cost_of_debt: 0.075
+  debt_to_capital: 0.15
+
+forecast:
+  base_year: 2026
+  base_revenue: 2750.0
+  tax_rate: 0.22
+  da_pct_revenue: 0.03
+  capex_pct_revenue: 0.035
+  nwc_pct_incremental_revenue: 0.05
+  terminal_growth: 0.03
+  mid_year: true
+  scenarios:
+    base:
+      weight: 0.5
+      revenue_growth: [0.20, 0.17, 0.14, 0.11, 0.08, 0.06, 0.05]
+      margin_convergence: {start: 0.03, target: 0.18, years_to_target: 5}
+    bear:
+      weight: 0.25
+      revenue_growth: [0.10, 0.08, 0.07, 0.06, 0.05, 0.04, 0.04]
+      margin_convergence: {start: 0.00, target: 0.12, years_to_target: 6}
+    bull:
+      weight: 0.25
+      revenue_growth: [0.28, 0.22, 0.18, 0.14, 0.10, 0.07, 0.05]
+      margin_convergence: {start: 0.05, target: 0.22, years_to_target: 4}
+
+bridge:
+  cash: 1500.0
+  debt: 900.0
+
+comps:
+  multiples: [ev_revenue, ev_ebitda]
+  peers:
+    - {name: Peer A, ticker: PA, ev_revenue: 3.1, ev_ebitda: 18.0}
+    - {name: Peer B, ticker: PB, ev_revenue: 2.4, ev_ebitda: 14.5}
+    - {name: Peer C, ticker: PC, ev_revenue: 4.0, ev_ebitda: 22.0}
+    - {name: Peer D, ticker: PD, ev_revenue: 2.8}
+
+rating:
+  buy_above: 0.15
+  sell_below: -0.10

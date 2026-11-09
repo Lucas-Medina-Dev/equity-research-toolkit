@@ -1,0 +1,118 @@
+# eToro Group Ltd (NASDAQ: ETOR) — worked example
+#
+# Units: USD millions unless stated. Revenue = Net Contribution, eToro's
+# primary top-line metric (trading income after crypto cost of revenue and
+# margin interest). Gross "revenue" (~$12bn) is inflated by crypto sold at
+# gross value and is not a meaningful base for margins.
+#
+# Every hard number is sourced in `sources:` at the bottom. Values marked
+# ASSUMPTION are analyst judgement and are justified inline.
+
+company:
+  name: eToro Group Ltd
+  ticker: ETOR
+  currency: USD
+  units: m
+  price: 22.48               # [S1] last price, snapshot retrieved 2026-11-07
+  price_date: "2026-11-06"
+  diluted_shares: 79.53      # [S1] implied shares outstanding, all share classes
+  valuation_date: "2026-12-31"
+  revenue_label: Net contribution
+
+# Fiscal years, oldest first. None = not disclosed.
+history:
+  years:      [2022,  2023,  2024,  2025]
+  revenue:    [null,  557.0, 787.7, 868.4]   # [S2][S3]
+  ebitda:     [null,  117.0, 303.9, 317.0]   # adjusted EBITDA [S3][S4]
+  net_income: [-21.0, 15.3,  192.4, 215.7]   # GAAP [S3][S4]
+  fcf:        [null,  null,  265.7, 312.8]   # CFO − PP&E − intangibles [S3]
+
+# Last twelve months to 30 June 2026 (Q3-25 + Q4-25 + Q1-26 + Q2-26)
+ltm:
+  revenue: 929.4      # 215.0 + 226.8 + 258.2 + 229.4   [S3][S5][S6]
+  ebitda: 351.6       # 78.0 + 87.0 + 108.5 + 78.1      [S3][S5][S6]
+  net_income: 261.6   # 57.0 + 68.7 + 82.4 + 53.5       [S3][S5][S6]
+
+cost_of_capital:
+  risk_free: 0.0494             # [S7] US 10Y Treasury, 30 Oct 2026
+  equity_risk_premium: 0.0428   # [S8] Damodaran implied ERP, 1 Aug 2026
+  raw_beta: 2.08                # [S9] ~18 months of trading history since May-2025 IPO
+  blume_adjust: true            # short history → shrink towards 1 (→ 1.72)
+  country_risk_premium: 0.0     # ASSUMPTION: revenue is global (EU/UK/AU/US), not Israel-driven
+  pre_tax_cost_of_debt: 0.0
+  debt_to_capital: 0.0          # no financial debt [S3]
+
+forecast:
+  base_year: 2026
+  # 2026E = H1-26 actual (258.2 + 229.4) + H2-26E at H2-25 level +5%
+  #       = 487.6 + (215.0 + 226.8) × 1.05 = 951.5        ASSUMPTION
+  base_revenue: 951.5
+  tax_rate: 0.18                 # ASSUMPTION: between FY24 (21.7%) and FY25 (14.9%) effective rates [S3]
+  da_pct_revenue: 0.015          # FY25 D&A 13.0 / 868.4 [S3]
+  capex_pct_revenue: 0.0063      # FY25 capex (4.8 PP&E + 0.6 intangibles) 5.5 / 868.4 [S3]
+  nwc_pct_incremental_revenue: 0.0   # asset-light platform; client money is ring-fenced
+  terminal_growth: 0.025         # framework range 2–3%
+  mid_year: true
+  # FY25 GAAP operating margin before finance costs: 264.8 / 868.4 = 30.5% [S3]
+  # (GAAP, so share-based compensation is already a cost).
+  scenarios:
+    base:
+      weight: 0.50
+      revenue_growth: [0.09, 0.08, 0.07, 0.06, 0.05]   # H1-26 grew +14% YoY; decelerating to GDP+ by 2031
+      ebit_margin:    [0.310, 0.315, 0.320, 0.325, 0.330]   # modest operating leverage
+    bear:
+      weight: 0.25
+      # Retail-trading downturn: 2023 net contribution was 557 vs 788 in 2024 —
+      # a −30% swing is within the company's own history.
+      revenue_growth: [-0.10, 0.02, 0.03, 0.03, 0.03]
+      ebit_margin:    [0.240, 0.250, 0.260, 0.270, 0.270]
+    bull:
+      weight: 0.25
+      # US expansion (TradeZero) and Q1-26-type activity sustained; Q1-26 adj. EBITDA margin was 42%.
+      revenue_growth: [0.14, 0.12, 0.10, 0.08, 0.06]
+      ebit_margin:    [0.330, 0.340, 0.350, 0.360, 0.360]
+
+bridge:
+  cash: 1200.0          # [S6] cash, equivalents and short-term investments, 30 Jun 2026
+  cash_haircut: 0.25    # ASSUMPTION: share held against regulatory capital (multi-licence broker)
+  debt: 0.0
+  leases: 54.5          # [S3] lease liabilities, 31 Dec 2025
+  other_claims: 231.0   # [S10] TradeZero acquisition, consideration up to $231m (signed Aug-2026)
+
+comps:
+  min_peers: 3
+  # EV/revenue is deliberately not used: peers' revenue lines (gross vs net of
+  # costs) and margins are not comparable with eToro's net contribution.
+  multiples: [ev_ebitda, pe]
+  peers:
+    - {name: Plus500,             ticker: PLUS.L, ev_ebitda: 4.91,                         as_of: "2026-10-02", source: S11}
+    - {name: IG Group,            ticker: IGG.L,  ev_ebitda: 8.4,                          as_of: "2026-03",    source: S12}
+    - {name: Interactive Brokers, ticker: IBKR,   ev_ebitda: 4.51, pe: 29.56,              as_of: "2026-11",    source: S13}
+    - {name: Robinhood,           ticker: HOOD,   ev_ebitda: 29.4,                         as_of: "2026-11-03", source: S14}
+
+trading_range: [22.05, 44.21]   # [S15] 52-week low / high
+
+rating:
+  buy_above: 0.15
+  sell_below: -0.10
+
+kpis:
+  funded_accounts_m: 3.81   # [S3] 31 Dec 2025
+  aua_bn: 18.5              # [S3] 31 Dec 2025
+
+sources:
+  S1:  "stockanalysis.com/stocks/etor/statistics — price, market cap, shares (retrieved 2026-11-07)"
+  S2:  "eToro F-1 / 2024 annual figures: FY23 net contribution $557m (via intrinio.com filing extract)"
+  S3:  "eToro Q4 and FY2025 results, 17 Feb 2026 — investors.etoro.com"
+  S4:  "Calcalist, 2025: FY23 EBITDA $117m, FY23 net income $15.3m, FY22 net loss $21m (from F-1)"
+  S5:  "eToro Q1 2026 results, 12 May 2026 — etoro.com press release"
+  S6:  "eToro Q2 2026 results and earnings call, 11 Aug 2026 — investors.etoro.com"
+  S7:  "FRED DGS10, 10-year Treasury constant maturity, 2026-10-30: 4.94%"
+  S8:  "Damodaran, implied ERP on 1 Aug 2026: 4.28% — pages.stern.nyu.edu/~adamodar"
+  S9:  "etoro.com/markets/etor — beta 2.08 (retrieved 2026-11-07)"
+  S10: "CoinMarketCap Academy, Aug 2026 — eToro buys TradeZero for up to $231m"
+  S11: "valueinvesting.io — Plus500 EV/EBITDA (TTM) 4.91x, 2026-10-02"
+  S12: "multiples.vc — IG Group EV/EBITDA (LTM) 8.4x, March 2026 (stale, refresh before use)"
+  S13: "Yahoo Finance key statistics — IBKR EV/EBITDA 4.51x, trailing P/E 29.56x (retrieved 2026-11-07)"
+  S14: "multiples.vc — Robinhood EV/EBITDA (LTM) 29.4x, 3 Nov 2026"
+  S15: "investing.com — ETOR 52-week range 22.05–44.21 (retrieved 2026-11-07)"

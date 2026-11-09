@@ -1,0 +1,17 @@
+{
+  "ticker": "ETOR",
+  "case": "case_2_profitable",
+  "rating": "BUY",
+  "price": 22.48,
+  "dcf_per_share": 48.4315,
+  "comps_per_share": 29.4336,
+  "blended_per_share": 38.9325,
+  "upside": 0.7319,
+  "wacc": 0.12317,
+  "implied_discount_rate": 0.3161257962584495,
+  "scenarios": {
+    "base": 50.2468,
+    "bear": 33.2179,
+    "bull": 60.0144
+  }
+}
